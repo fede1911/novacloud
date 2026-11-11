@@ -42,10 +42,12 @@ class TestTurnRecorder:
         Expected: one TextDelta with the text.
         """
         # Act
-        events = turn_events.TurnRecorder().observe({"data": "Ciao"})
+        events = turn_events.TurnRecorder().observe(
+            {"data": "Ciao"}, agent_type="scope"
+        )
 
         # Assert
-        assert events == [turn_events.TextDelta(text="Ciao")]
+        assert events == [turn_events.TextDelta(text="Ciao", agent_type="scope")]
 
     def test_tool_call_and_result_are_recorded(self):
         """Test: assistant message with a tool call, then its result.
@@ -55,8 +57,8 @@ class TestTurnRecorder:
         recorder = turn_events.TurnRecorder()
 
         # Act
-        started = recorder.observe({"message": _tool_use_message()})
-        recorder.observe({"message": _tool_result_message()})
+        started = recorder.observe({"message": _tool_use_message()}, agent_type="scope")
+        recorder.observe({"message": _tool_result_message()}, agent_type="scope")
 
         # Assert
         assert started == [
@@ -72,12 +74,18 @@ class TestTurnRecorder:
         """
         # Arrange
         recorder = turn_events.TurnRecorder()
-        recorder.observe({"message": _tool_use_message()})
+        recorder.observe({"message": _tool_use_message()}, agent_type="scope")
 
         # Act
         discarded = recorder.discard_text()
         recorder.observe(
-            {"message": {"role": "assistant", "content": [{"text": "Risposta finale"}]}}
+            {
+                "message": {
+                    "role": "assistant",
+                    "content": [{"text": "Risposta finale"}],
+                }
+            },
+            agent_type="scope",
         )
 
         # Assert
@@ -98,7 +106,7 @@ class TestTurnRecorder:
         )
 
         # Act
-        recorder.observe({"result": result})
+        recorder.observe({"result": result}, agent_type="scope")
 
         # Assert
         assert (recorder.input_tokens, recorder.output_tokens) == (120, 30)
