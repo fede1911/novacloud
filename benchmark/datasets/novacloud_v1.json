@@ -1,0 +1,134 @@
+{
+  "dataset_name": "novacloud_v1",
+  "scenarios": [
+    {
+      "scenario_id": "novaid_password_reset",
+      "title": "Password dimenticata, routing chiaro",
+      "turns": ["Ho dimenticato la password del mio account NovaCloud, come faccio a rientrare?"],
+      "gold_scopes": ["novaid"],
+      "ground_truth": [
+        "Si usa 'Password dimenticata?' sulla pagina di accesso id.novacloud.example",
+        "Arriva un'email con un link valido 30 minuti",
+        "La nuova password deve avere almeno 12 caratteri, una maiuscola e un numero"
+      ],
+      "must_include": ["Passi numerati della procedura", "Fonti con URL della documentazione"],
+      "must_not_include": ["Richiesta della password attuale o di codici di verifica"],
+      "expected_tools": ["search-documentation-novaid"]
+    },
+    {
+      "scenario_id": "novaid_sms_code_abroad",
+      "title": "Codice SMS non ricevuto all'estero",
+      "turns": ["Sono in vacanza in Giappone e non mi arriva l'SMS con il codice per entrare"],
+      "gold_scopes": ["novaid"],
+      "ground_truth": [
+        "All'estero alcuni operatori bloccano gli SMS brevi",
+        "Si può usare l'app di autenticazione o un codice di backup",
+        "Il codice SMS scade dopo 5 minuti e se ne può chiedere uno nuovo dopo 60 secondi"
+      ],
+      "must_include": ["Suggerimento di usare un codice di backup o l'app di autenticazione"],
+      "must_not_include": ["Richiesta del codice di verifica all'utente"],
+      "expected_tools": ["search-documentation-novaid"]
+    },
+    {
+      "scenario_id": "novadrive_sync_degraded",
+      "title": "Sincronizzazione lenta durante un disservizio",
+      "turns": ["L'app NovaDrive sul mio Mac è lentissima a sincronizzare un video da 3 GB, è normale?"],
+      "gold_scopes": ["novadrive"],
+      "ground_truth": [
+        "È in corso un rallentamento nella sincronizzazione dei file superiori a 1 GB",
+        "I file grandi vengono caricati a blocchi e la barra può restare ferma qualche minuto",
+        "Conviene verificare che non sia attivo un limite di banda in Impostazioni > Rete"
+      ],
+      "must_include": ["Informazione sul disservizio in corso"],
+      "must_not_include": ["Dettagli tecnici interni sui sistemi"],
+      "expected_tools": ["search-documentation-novadrive", "system_health_check_novadrive"]
+    },
+    {
+      "scenario_id": "novadrive_restore_deleted",
+      "title": "Recupero file eliminato, scope fissato dal chiamante",
+      "scope_ids": ["novadrive"],
+      "turns": ["Ho cancellato per sbaglio una cartella due settimane fa, posso recuperarla?"],
+      "ground_truth": [
+        "I file eliminati restano nel Cestino per 30 giorni (90 con il piano Business)",
+        "Si ripristinano dal Cestino con 'Ripristina'"
+      ],
+      "must_include": ["Procedura di ripristino dal Cestino"],
+      "must_not_include": ["Tempi di conservazione diversi da quelli della documentazione"],
+      "expected_tools": ["search-documentation-novadrive"]
+    },
+    {
+      "scenario_id": "novabill_double_charge_ticket",
+      "title": "Addebito doppio con richiesta di ticket in due turni",
+      "turns": [
+        "Mi avete addebitato due volte l'abbonamento Plus il 3 marzo, entrambi gli addebiti sono contabilizzati da 10 giorni",
+        "Sì, apri pure il ticket. Sono Giulia Bianchi, email giulia.bianchi@example.com"
+      ],
+      "gold_scopes": ["novabill"],
+      "should_open_ticket": true,
+      "ground_truth": [
+        "Se dopo 7 giorni entrambi gli addebiti sono contabilizzati serve un ticket al team fatturazione",
+        "Il rimborso dell'importo duplicato avviene entro 10 giorni lavorativi",
+        "Viene comunicato il numero del ticket aperto"
+      ],
+      "must_include": ["Numero del ticket nell'ultima risposta"],
+      "must_not_include": ["Importi o date di rimborso inventati"],
+      "expected_tools": ["search-documentation-novabill", "open_ticket_novabill"]
+    },
+    {
+      "scenario_id": "novabill_refund_annual",
+      "title": "Rimborso abbonamento annuale",
+      "turns": ["Ho comprato il piano annuale 20 giorni fa ma non mi serve più, mi ridate i soldi?"],
+      "gold_scopes": ["novabill"],
+      "ground_truth": [
+        "Il rimborso completo è previsto solo per disdette entro 14 giorni dall'acquisto",
+        "Dopo 14 giorni non ci sono rimborsi parziali e l'abbonamento resta attivo fino alla scadenza"
+      ],
+      "must_include": ["Risposta chiara che il rimborso non è previsto dopo 14 giorni"],
+      "must_not_include": ["Promessa di un rimborso"],
+      "expected_tools": ["search-documentation-novabill"]
+    },
+    {
+      "scenario_id": "multi_drive_login_after_password",
+      "title": "Multi-scope: accesso all'app dopo il cambio password",
+      "turns": ["Ho cambiato la password ieri e adesso l'app NovaDrive sul telefono mi butta fuori e non riesco a rientrare"],
+      "gold_scopes": ["novadrive", "novaid"],
+      "ground_truth": [
+        "Dopo il cambio password si viene disconnessi da tutti i dispositivi, app NovaDrive incluse",
+        "Bisogna accedere di nuovo all'app con le nuove credenziali NovaID"
+      ],
+      "must_include": ["Indicazione di accedere di nuovo con le nuove credenziali"],
+      "must_not_include": ["Richiesta della password"],
+      "expected_tools": ["search-documentation-"]
+    },
+    {
+      "scenario_id": "triage_clarification",
+      "title": "Richiesta ambigua: il triage chiede un chiarimento",
+      "turns": ["Buongiorno, ho un problema"],
+      "gold_scopes": [],
+      "must_include": ["Una domanda di chiarimento sul prodotto"]
+    },
+    {
+      "scenario_id": "rerouting_drive_to_bill",
+      "title": "Rerouting: da NovaDrive a NovaBill nella stessa chat",
+      "turns": [
+        "Come creo un link per condividere una cartella?",
+        "Grazie. Un'altra cosa: come scarico la fattura del mese scorso?"
+      ],
+      "gold_scopes": ["novadrive"],
+      "ground_truth": [
+        "Le fatture sono in Profilo > Fatturazione > Fatture in PDF",
+        "Sono disponibili il giorno dopo ogni addebito"
+      ],
+      "must_include": ["Risposta sulla fattura nell'ultimo turno"],
+      "must_not_include": ["Rifiuto di rispondere sulla fattura"],
+      "expected_tools": ["search-documentation-novadrive", "request_rerouting", "search-documentation-novabill"]
+    },
+    {
+      "scenario_id": "out_of_domain",
+      "title": "Domanda fuori dominio",
+      "turns": ["Mi consigli una ricetta per la carbonara?"],
+      "gold_scopes": [],
+      "must_include": ["Spiegazione che può aiutare solo sui prodotti NovaCloud"]
+    }
+  ]
+}

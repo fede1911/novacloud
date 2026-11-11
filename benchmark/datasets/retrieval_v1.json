@@ -1,0 +1,261 @@
+{
+  "dataset_name": "retrieval_v1",
+  "cases": [
+    {
+      "case_id": "r01",
+      "scope_id": "novaid",
+      "query": "ho dimenticato la password, come la cambio?",
+      "relevant": [
+        "novaid-password-dimenticata#Reimpostare la password"
+      ]
+    },
+    {
+      "case_id": "r02",
+      "scope_id": "novaid",
+      "query": "non mi arriva la mail per resettare la password",
+      "relevant": [
+        "novaid-password-dimenticata#Non ricevo l'email di recupero"
+      ]
+    },
+    {
+      "case_id": "r03",
+      "scope_id": "novaid",
+      "query": "ho sbagliato la password troppe volte e mi ha bloccato",
+      "relevant": [
+        "novaid-password-dimenticata#Account bloccato"
+      ]
+    },
+    {
+      "case_id": "r04",
+      "scope_id": "novaid",
+      "query": "come attivo l'autenticazione a due fattori?",
+      "relevant": [
+        "novaid-verifica-due-passaggi#Attivare la verifica in due passaggi"
+      ]
+    },
+    {
+      "case_id": "r05",
+      "scope_id": "novaid",
+      "query": "sono all'estero e l'sms con il codice non arriva",
+      "relevant": [
+        "novaid-verifica-due-passaggi#Non ricevo il codice SMS"
+      ]
+    },
+    {
+      "case_id": "r06",
+      "scope_id": "novaid",
+      "query": "mi hanno rubato il telefono con l'app dei codici",
+      "relevant": [
+        "novaid-verifica-due-passaggi#Ho perso il telefono con l'app di autenticazione"
+      ]
+    },
+    {
+      "case_id": "r07",
+      "scope_id": "novaid",
+      "query": "voglio cancellare definitivamente il mio account",
+      "relevant": [
+        "novaid-eliminare-account#Eliminare l'account"
+      ]
+    },
+    {
+      "case_id": "r08",
+      "scope_id": "novaid",
+      "query": "come cambio l'indirizzo email del profilo?",
+      "relevant": [
+        "novaid-eliminare-account#Cambiare l'email dell'account"
+      ]
+    },
+    {
+      "case_id": "r09",
+      "scope_id": "novadrive",
+      "query": "la cartella sul pc non si aggiorna più",
+      "relevant": [
+        "novadrive-sincronizzazione-desktop#La cartella non si sincronizza"
+      ]
+    },
+    {
+      "case_id": "r10",
+      "scope_id": "novadrive",
+      "query": "alcuni file con nomi strani non vengono caricati",
+      "relevant": [
+        "novadrive-sincronizzazione-desktop#File non sincronizzati"
+      ]
+    },
+    {
+      "case_id": "r11",
+      "scope_id": "novadrive",
+      "query": "il caricamento di un video grande è lentissimo",
+      "relevant": [
+        "novadrive-sincronizzazione-desktop#Sincronizzazione lenta"
+      ]
+    },
+    {
+      "case_id": "r12",
+      "scope_id": "novadrive",
+      "query": "il mio collega non riesce ad aprire il link che gli ho mandato",
+      "relevant": [
+        "novadrive-condivisione-link#Il destinatario non riesce ad aprire il link"
+      ]
+    },
+    {
+      "case_id": "r13",
+      "scope_id": "novadrive",
+      "query": "come condivido una cartella con un link protetto da password?",
+      "relevant": [
+        "novadrive-condivisione-link#Creare un link di condivisione"
+      ]
+    },
+    {
+      "case_id": "r14",
+      "scope_id": "novadrive",
+      "query": "ho cancellato per sbaglio dei file, li posso riavere?",
+      "relevant": [
+        "novadrive-spazio-e-cestino#Recuperare file e cartelle eliminati"
+      ]
+    },
+    {
+      "case_id": "r15",
+      "scope_id": "novadrive",
+      "query": "voglio tornare alla versione di ieri di un documento",
+      "relevant": [
+        "novadrive-spazio-e-cestino#Ripristinare una versione precedente"
+      ]
+    },
+    {
+      "case_id": "r16",
+      "scope_id": "novadrive",
+      "query": "quanti giga ho con il piano plus?",
+      "relevant": [
+        "novadrive-spazio-e-cestino#Spazio disponibile per piano"
+      ]
+    },
+    {
+      "case_id": "r17",
+      "scope_id": "novadrive",
+      "query": "le foto del telefono si caricano da sole?",
+      "relevant": [
+        "novadrive-app-mobile#Caricamento automatico delle foto"
+      ]
+    },
+    {
+      "case_id": "r18",
+      "scope_id": "novadrive",
+      "query": "le foto dell'iphone in heic diventano jpg?",
+      "relevant": [
+        "novadrive-app-mobile#Caricamento automatico delle foto"
+      ]
+    },
+    {
+      "case_id": "r19",
+      "scope_id": "novadrive",
+      "query": "se cancello le foto dal telefono restano su novadrive?",
+      "relevant": [
+        "novadrive-app-mobile#Caricamento automatico delle foto"
+      ]
+    },
+    {
+      "case_id": "r20",
+      "scope_id": "novadrive",
+      "query": "come apro i file quando non ho internet?",
+      "relevant": [
+        "novadrive-app-mobile#Accesso offline"
+      ]
+    },
+    {
+      "case_id": "r21",
+      "scope_id": "novadrive",
+      "query": "non voglio più gli avvisi quando qualcuno mi condivide un file",
+      "relevant": [
+        "novadrive-app-mobile#Notifiche > Notifiche di condivisione"
+      ]
+    },
+    {
+      "case_id": "r22",
+      "scope_id": "novabill",
+      "query": "mi ridate i soldi del piano annuale?",
+      "relevant": [
+        "novabill-fatture-e-rimborsi#Rimborsi"
+      ]
+    },
+    {
+      "case_id": "r23",
+      "scope_id": "novabill",
+      "query": "mi avete addebitato due volte lo stesso mese",
+      "relevant": [
+        "novabill-fatture-e-rimborsi#Addebito doppio"
+      ]
+    },
+    {
+      "case_id": "r24",
+      "scope_id": "novabill",
+      "query": "dove trovo le fatture in pdf?",
+      "relevant": [
+        "novabill-fatture-e-rimborsi#Scaricare le fatture"
+      ]
+    },
+    {
+      "case_id": "r25",
+      "scope_id": "novabill",
+      "query": "la carta è stata rifiutata al rinnovo",
+      "relevant": [
+        "novabill-piani-e-pagamenti#Pagamento rifiutato"
+      ]
+    },
+    {
+      "case_id": "r26",
+      "scope_id": "novabill",
+      "query": "posso pagare con paypal?",
+      "relevant": [
+        "novabill-piani-e-pagamenti#Metodi di pagamento"
+      ]
+    },
+    {
+      "case_id": "r27",
+      "scope_id": "novabill",
+      "query": "quanto costa il piano business?",
+      "relevant": [
+        "novabill-piani-e-pagamenti#Piani disponibili"
+      ]
+    },
+    {
+      "case_id": "r28",
+      "scope_id": "novabill",
+      "query": "come annullo l'abbonamento?",
+      "relevant": [
+        "novabill-disdetta#Come disdire"
+      ]
+    },
+    {
+      "case_id": "r29",
+      "scope_id": "novabill",
+      "query": "dopo la disdetta perdo i miei file?",
+      "relevant": [
+        "novabill-disdetta#Cosa succede ai file dopo la disdetta"
+      ]
+    },
+    {
+      "case_id": "r30",
+      "scope_id": "novabill",
+      "query": "mi consigli una ricetta per la carbonara?",
+      "relevant": []
+    },
+    {
+      "case_id": "r31",
+      "scope_id": "novaid",
+      "query": "che tempo fa domani a Milano?",
+      "relevant": []
+    },
+    {
+      "case_id": "r32",
+      "scope_id": "novadrive",
+      "query": "come scarico la fattura del mese scorso?",
+      "relevant": []
+    },
+    {
+      "case_id": "r33",
+      "scope_id": "novaid",
+      "query": "posso pagare con paypal?",
+      "relevant": []
+    }
+  ]
+}

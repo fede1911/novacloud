@@ -1,0 +1,6 @@
+# Runtime dependencies (pinned)
+strands-agents==1.38.0
+boto3==1.40.67
+pydantic==2.14.3
+numpy==2.5.4
+PyYAML==6.0.2

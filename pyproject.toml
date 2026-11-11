@@ -1,0 +1,32 @@
+[project]
+name = "multi-agent-support-blueprint"
+version = "0.1.0"
+description = "Local blueprint of a multi-agent support chatbot (triage + scope agents, RAG, benchmark)"
+requires-python = ">=3.12"
+license = "MIT"
+
+[tool.ruff]
+target-version = "py312"
+indent-width = 4
+exclude = [".venv", "var"]
+
+[tool.ruff.lint]
+select = ["E", "F", "B", "I", "UP", "G", "LOG", "PTH", "RET", "SIM"]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-v -ra --strict-markers"
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+    "unit: fast isolated tests",
+    "integration: tests that touch the local filesystem",
+    "slow: tests that call a real LLM",
+]
+filterwarnings = ["ignore::DeprecationWarning"]

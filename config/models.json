@@ -1,0 +1,23 @@
+{
+  "triage": {
+    "description": "Triage: a fast model at temperature 0, routing must be stable",
+    "models": [
+      {"provider": "bedrock", "model_id": "eu.anthropic.claude-haiku-4-5-20251001-v1:0", "temperature": 0.0, "params": {"region_name": "eu-west-1"}},
+      {"provider": "bedrock", "model_id": "eu.anthropic.claude-haiku-4-5-20251001-v1:0", "temperature": 0.0, "params": {"region_name": "eu-south-1"}}
+    ]
+  },
+  "scope": {
+    "description": "Product specialists: Claude Sonnet 4.5, which reasons better on the conditions in the documents (times, plans, limits); fallback on Claude Haiku 4.5",
+    "models": [
+      {"provider": "bedrock", "model_id": "eu.anthropic.claude-sonnet-4-5-20250929-v1:0", "temperature": 0.2, "prompt_caching": true, "params": {"region_name": "eu-west-1"}},
+      {"provider": "bedrock", "model_id": "eu.anthropic.claude-haiku-4-5-20251001-v1:0", "temperature": 0.2, "prompt_caching": true, "params": {"region_name": "eu-west-1"}}
+    ]
+  },
+  "judge": {
+    "description": "Benchmark judge: Mistral, another family than the evaluated agents, at temperature 0. Streaming off: on Bedrock, Mistral does not support tools while streaming, and structured output needs them",
+    "models": [
+      {"provider": "bedrock", "model_id": "eu.mistral.pixtral-large-2502-v1:0", "temperature": 0.0, "params": {"region_name": "eu-west-1", "streaming": false}},
+      {"provider": "bedrock", "model_id": "mistral.mistral-large-2402-v1:0", "temperature": 0.0, "params": {"region_name": "eu-west-1", "streaming": false}}
+    ]
+  }
+}

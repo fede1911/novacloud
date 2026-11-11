@@ -1,0 +1,1 @@
+"""search documentation tool."""

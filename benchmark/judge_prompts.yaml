@@ -1,0 +1,52 @@
+# LLM-as-judge prompts, one per metric. The answer is a structured object (score, reasoning),
+# so the prompts describe only what to evaluate.
+# Placeholders: {ground_truth}, {must_include}, {must_not_include}, {question}, {transcript}
+
+system: |
+  Valuti la qualità delle risposte di un assistente di supporto clienti.
+  Giudica solo ciò che è scritto nella conversazione: non dare per scontate informazioni che mancano.
+  Restituisci un voto intero da 1 a 10 e una motivazione breve e concreta.
+
+accuracy: |
+  # Metrica: correttezza
+  Le informazioni date dall'assistente sono vere rispetto ai fatti di riferimento?
+  I fatti di riferimento sono il minimo atteso, non tutto ciò che è vero: l'assistente legge una
+  documentazione più ampia. Penalizza solo le affermazioni in contraddizione con i fatti, quelle
+  implausibili o le contraddizioni interne; non penalizzare i dettagli in più coerenti con i fatti,
+  anche se non puoi verificarli.
+
+  ## Fatti di riferimento
+  {ground_truth}
+
+  ## Prima domanda dell'utente
+  {question}
+
+  ## Conversazione
+  {transcript}
+
+  ## Scala
+  10 tutto corretto · 7 corretto con imprecisioni minori · 4 errori rilevanti · 1 sbagliato o inventato
+
+completeness: |
+  # Metrica: completezza
+  L'ultima risposta dell'assistente contiene i fatti di riferimento e i comportamenti richiesti,
+  ed evita quelli vietati?
+
+  ## Fatti di riferimento
+  {ground_truth}
+
+  ## Comportamenti richiesti
+  {must_include}
+
+  ## Comportamenti o contenuti vietati
+  Se ne compare anche uno solo, il voto non può superare 4.
+  {must_not_include}
+
+  ## Prima domanda dell'utente
+  {question}
+
+  ## Conversazione
+  {transcript}
+
+  ## Scala
+  10 completa · 7 manca un dettaglio secondario · 4 mancano parti importanti o c'è un contenuto vietato · 1 non risponde

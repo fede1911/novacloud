@@ -1,0 +1,31 @@
+# Runtime state of the blueprint: index, sessions, chats, tickets, logs, benchmark runs
+var/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+
+# Test and lint tools
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Local environment and secrets
+.env
+.env.*
+
+# Editors and operating systems
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Local settings
+.claude/

@@ -1,0 +1,32 @@
+[
+  {
+    "scope_id": "novaid",
+    "label": "NovaID",
+    "description": "account unico NovaCloud: registrazione, accesso, password dimenticata, verifica in due passaggi (2FA), dati del profilo, eliminazione dell'account.",
+    "tools": [
+      "search_documentation",
+      "systems_health",
+      "open_ticket"
+    ]
+  },
+  {
+    "scope_id": "novadrive",
+    "label": "NovaDrive",
+    "description": "archiviazione file in cloud: caricamento, sincronizzazione con le app desktop e mobile, link di condivisione, spazio disponibile, cestino e versioni precedenti dei file.",
+    "tools": [
+      "search_documentation",
+      "systems_health",
+      "open_ticket"
+    ]
+  },
+  {
+    "scope_id": "novabill",
+    "label": "NovaBill",
+    "description": "abbonamenti e fatturazione NovaCloud: piani, pagamenti, metodi di pagamento, fatture, rimborsi, disdetta dell'abbonamento.",
+    "tools": [
+      "search_documentation",
+      "systems_health",
+      "open_ticket"
+    ]
+  }
+]

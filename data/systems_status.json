@@ -1,0 +1,15 @@
+{
+  "novaid": [
+    {"resource_name": "NovaID - Accesso web", "status": "operational"},
+    {"resource_name": "NovaID - Invio codici di verifica via SMS", "status": "operational"}
+  ],
+  "novadrive": [
+    {"resource_name": "NovaDrive - Caricamento da web", "status": "operational"},
+    {"resource_name": "NovaDrive - Sincronizzazione app desktop", "status": "degraded", "note": "Rallentamenti nella sincronizzazione dei file superiori a 1 GB, risoluzione in corso"},
+    {"resource_name": "NovaDrive - Link di condivisione", "status": "operational"}
+  ],
+  "novabill": [
+    {"resource_name": "NovaBill - Pagamenti con carta", "status": "operational"},
+    {"resource_name": "NovaBill - Invio fatture via email", "status": "maintenance", "note": "Manutenzione programmata: le fatture restano scaricabili dall'area Fatturazione"}
+  ]
+}

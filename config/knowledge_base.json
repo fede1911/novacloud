@@ -1,0 +1,10 @@
+{
+  "embedder": {
+    "model_id": "amazon.titan-embed-text-v2:0",
+    "region_name": "eu-west-1",
+    "dimensions": 512,
+    "max_concurrency": 4
+  },
+  "chunking": {"max_chars": 1200, "overlap_chars": 150},
+  "retrieval": {"top_k": 5, "min_score": 0.3}
+}
