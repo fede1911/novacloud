@@ -22,7 +22,9 @@ the answers, `shared` holds what the modules have in common. The configuration i
    with `stream_async(None)` in the same turn. At most one rerouting per turn
    ([0001](decisions/0001-explicit-orchestrator.md)).
 5. **Events**: `TurnRecorder` turns the Strands events into `TextDelta`, `ToolStarted`, `Handover`,
-   `TurnCompleted`. The CLI prints them, the benchmark reads the last one.
+   `TurnCompleted`. Every text chunk says which agent wrote it: the CLI streams the specialist and
+   holds back the triage text until the turn ends, so a preamble before a handover is never shown.
+   The benchmark reads only the last event.
 6. **Persistence**: the answer goes to the chat history (`ChatStore`), the model state to the Strands
    session ([0003](decisions/0003-two-memories.md)).
 
@@ -42,8 +44,9 @@ the answers, `shared` holds what the modules have in common. The configuration i
   The metadata record model and dimensions, and at startup `check_compatibility` compares them with
   the configuration: on a mismatch the agent stops and asks for `make ingest`
   ([0006](decisions/0006-rag.md)).
-- **When a change applies**: `config/` at restart; `prompts/` at the next turn, because every turn
-  rebuilds the agent; the index at restart after `make ingest`; the status page immediately.
+- **When a change applies**: `config/` at restart, and embedder or chunking only after `make ingest`;
+  `prompts/` at the next turn, because every turn rebuilds the agent; the documents after `make ingest`
+  and a restart; the status page immediately.
 
 ## Benchmark and tests
 
@@ -51,7 +54,7 @@ the answers, `shared` holds what the modules have in common. The configuration i
   (routing, escalation, tools) and a structured judge ([0007](decisions/0007-evaluation.md)).
 - `make bench-retrieval` measures the retrieval alone (recall@1, recall@5, MRR, rejection of
   off-domain queries) for several thresholds: that is where `min_score` comes from.
-- `make test` runs 81 offline tests. The orchestrator is tested with scripted agents
+- `make test` runs 83 offline tests. The orchestrator is tested with scripted agents
   (`tests/integration/test_orchestrator.py`), the ingestion with a fake embedder (`tests/fakes.py`).
 
 ## Extending

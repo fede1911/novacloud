@@ -167,7 +167,8 @@ Behaviour changes without touching the code.
 |---|---|---|
 | models and fallbacks of every role | `config/models.json` | at restart |
 | products and their tools | `config/scopes.json` | at restart |
-| embedder, chunking, retrieval | `config/knowledge_base.json` | at the next `make ingest` |
+| embedder and chunking | `config/knowledge_base.json` | at the next `make ingest`; until then the agent refuses to start if the embedding model changed |
+| retrieval (`top_k`, `min_score`) | `config/knowledge_base.json` | at restart |
 | agent behaviour | `prompts/*.md` | at the next turn |
 | documentation | `data/kb/<product>/*.md` | after `make ingest` and a restart |
 | service status | `data/systems_status.json` | immediately |
