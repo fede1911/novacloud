@@ -13,9 +13,16 @@ from agent.models import chat as chat_models
 
 @dataclasses.dataclass(frozen=True)
 class TextDelta:
-    """A chunk of text written by the current agent."""
+    """A chunk of text written by the current agent.
+
+    Attributes:
+        text: The chunk.
+        agent_type: Agent that wrote it: the text of the triage may turn out to be
+            a preamble discarded at the handover, so an interface can hold it back.
+    """
 
     text: str
+    agent_type: chat_models.AgentType
 
 
 @dataclasses.dataclass(frozen=True)
@@ -90,10 +97,12 @@ class TurnRecorder:
         self.input_tokens = 0
         self.output_tokens = 0
 
-    def observe(self, event: dict[str, Any]) -> list[TurnEvent]:
-        """Records a Strands stream event and returns the turn events it produces."""
+    def observe(
+        self, event: dict[str, Any], *, agent_type: chat_models.AgentType
+    ) -> list[TurnEvent]:
+        """Records a Strands stream event of an agent and returns the turn events it produces."""
         if event.get("data"):
-            return [TextDelta(text=event["data"])]
+            return [TextDelta(text=event["data"], agent_type=agent_type)]
 
         if "message" in event:
             return self._observe_message(event["message"])

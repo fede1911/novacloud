@@ -10,6 +10,7 @@ import argparse
 import asyncio
 import json
 import uuid
+from collections.abc import Callable
 
 from agent import agent_config, runtime, turn_events
 from agent.models import chat as chat_models
@@ -36,25 +37,54 @@ def _parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def _print_event(event: turn_events.TurnEvent) -> None:
-    """Prints a turn event: text in the default color, tools and handovers dimmed."""
-    if isinstance(event, turn_events.TextDelta):
-        print(event.text, end="", flush=True)
-    elif isinstance(event, turn_events.ToolStarted):
-        print(f"\n{DIM}  ⚙ {event.tool_name}{RESET}", flush=True)
-    elif isinstance(event, turn_events.Handover):
-        discarded = " (previous text discarded)" if event.discarded_text else ""
-        target = ", ".join(event.scope_ids) if event.scope_ids else "triage"
-        print(
-            f"\n{YELLOW}  ↪ handover {event.from_agent} → {target}{discarded}{RESET}",
-            flush=True,
-        )
-    elif isinstance(event, turn_events.TurnCompleted):
-        result = event.result
-        print(
-            f"\n{DIM}  [{result.agent_type} {result.scope_ids} | "
-            f"tokens in/out {result.input_tokens}/{result.output_tokens}]{RESET}\n"
-        )
+class TurnPrinter:
+    """Prints the events of a turn in the terminal.
+
+    The text of the specialist is printed as it streams. The text of the triage is
+    held back until the turn ends: it is printed only if the triage answered (e.g. a
+    clarification), and dropped if the triage handed the turn over, because then it
+    is a preamble that is not part of the answer.
+    """
+
+    def __init__(self, write: Callable[[str], None]):
+        """Initializes the printer.
+
+        Args:
+            write: Writes a piece of output, without adding a newline.
+        """
+        self._write = write
+        self._held_triage_text: list[str] = []
+
+    def handle(self, event: turn_events.TurnEvent) -> None:
+        """Prints one event: text in the default color, tools and handovers dimmed."""
+        if isinstance(event, turn_events.TextDelta):
+            if event.agent_type == chat_models.TRIAGE_AGENT:
+                self._held_triage_text.append(event.text)
+            else:
+                self._write(event.text)
+        elif isinstance(event, turn_events.ToolStarted):
+            self._write(f"\n{DIM}  ⚙ {event.tool_name}{RESET}\n")
+        elif isinstance(event, turn_events.Handover):
+            if event.from_agent == chat_models.TRIAGE_AGENT:
+                self._held_triage_text = []
+            discarded = " (previous text discarded)" if event.discarded_text else ""
+            target = ", ".join(event.scope_ids) if event.scope_ids else "triage"
+            self._write(
+                f"\n{YELLOW}  ↪ handover {event.from_agent} → {target}{discarded}{RESET}\n"
+            )
+        elif isinstance(event, turn_events.TurnCompleted):
+            # The triage answered the user itself: its held text is the answer
+            self._write("".join(self._held_triage_text))
+            self._held_triage_text = []
+            result = event.result
+            self._write(
+                f"\n{DIM}  [{result.agent_type} {result.scope_ids} | "
+                f"tokens in/out {result.input_tokens}/{result.output_tokens}]{RESET}\n\n"
+            )
+
+
+def _write(text: str) -> None:
+    print(text, end="", flush=True)
 
 
 async def _chat_loop(app: runtime.Runtime, chat_ctx: chat_models.ChatContext) -> None:
@@ -81,8 +111,9 @@ async def _chat_loop(app: runtime.Runtime, chat_ctx: chat_models.ChatContext) ->
             continue
 
         print(f"{CYAN}nova> {RESET}", end="", flush=True)
+        printer = TurnPrinter(write=_write)
         async for event in app.orchestrator.run_turn(chat_ctx, prompt):
-            _print_event(event)
+            printer.handle(event)
 
 
 def main() -> None:

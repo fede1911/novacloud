@@ -122,7 +122,9 @@ class AgentOrchestrator:
         )
         pending_prompt: str | None = prompt
         for handovers_done in range(MAX_HANDOVERS_PER_TURN + 1):
-            async for event in self._stream(agent, pending_prompt, recorder):
+            async for event in self._stream(
+                agent, agent_type, pending_prompt, recorder
+            ):
                 yield event
             # The next agent answers the question already in the session
             pending_prompt = None
@@ -228,11 +230,14 @@ class AgentOrchestrator:
 
     @staticmethod
     async def _stream(
-        agent: "strands.Agent", prompt: str | None, recorder: turn_events.TurnRecorder
+        agent: "strands.Agent",
+        agent_type: chat_models.AgentType,
+        prompt: str | None,
+        recorder: turn_events.TurnRecorder,
     ) -> AsyncIterator[turn_events.TurnEvent]:
         """Streams an agent; with no prompt the agent answers the question already in the history."""
         async for event in agent.stream_async(prompt):
-            for turn_event in recorder.observe(event):
+            for turn_event in recorder.observe(event, agent_type=agent_type):
                 yield turn_event
 
     def _hand_over(

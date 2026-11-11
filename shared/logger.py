@@ -1,7 +1,8 @@
 """Application logging of the blueprint.
 
-The log goes to a file, so it does not mix with the chat printed by the CLI;
-only warnings and errors are also written to stderr.
+Everything goes to var/logs/blueprint.log; the console gets only the errors,
+so the log does not mix with the chat printed by the CLI. Follow the file with
+`tail -f var/logs/blueprint.log` to see warnings and the flow of every turn.
 """
 
 import logging
@@ -25,7 +26,7 @@ def get_logger(name: str) -> logging.Logger:
 
 
 def configure_logging(*, logs_dir: pathlib.Path, level: str) -> pathlib.Path:
-    """Sends the blueprint logs to a file and the warnings to stderr.
+    """Sends the blueprint logs to a file, and only the errors to stderr.
 
     Args:
         logs_dir: Folder of the log file, created if missing.
@@ -42,7 +43,7 @@ def configure_logging(*, logs_dir: pathlib.Path, level: str) -> pathlib.Path:
     file_handler.setFormatter(logging.Formatter(LOG_FORMAT))
 
     stderr_handler = logging.StreamHandler()
-    stderr_handler.setLevel(logging.WARNING)
+    stderr_handler.setLevel(logging.ERROR)
     stderr_handler.setFormatter(logging.Formatter(LOG_FORMAT))
 
     root_logger = logging.getLogger(ROOT_LOGGER_NAME)
