@@ -28,13 +28,18 @@ sequenceDiagram
     participant KB as Knowledge base (Titan)
 
     U->>O: "La cartella non si sincronizza"
-    O->>T: message
-    T->>O: set_scope(["novadrive"])
-    O->>S: continues on the same session
+    O->>T: runs the triage on the message
+    T-->>O: set_scope(["novadrive"]) — request in the agent state, triage stops
+    O->>S: builds the specialist, continues on the same session
     S->>KB: search-documentation-novadrive
-    S->>S: system_health_check_novadrive
-    S-->>U: answer with sources
+    KB-->>S: relevant chunks
+    S->>S: system_health_check_novadrive (status page)
+    S-->>O: answer with sources
+    O-->>U: streamed answer
 ```
+
+Agents never talk to each other or to the user: they signal through their tools, and the
+orchestrator decides every handover and streams the answer.
 
 The complete component diagram is at the end of the [code guide](docs/guide.md).
 

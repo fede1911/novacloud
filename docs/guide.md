@@ -68,8 +68,11 @@ the answers, `shared` holds what the modules have in common. The configuration i
 - **New model provider**: a class in `agent/model_providers/` and an entry in
   `model_factory.PROVIDERS`. For other backends there is already `litellm`, after
   `pip install "strands-agents[litellm]"`.
-- **Another embedder**: implement `shared.embeddings.Embedder` and review `min_score`, because every
-  model has its own similarity scale.
+- **Another embedder**: implement the `shared.embeddings.Embedder` protocol (`name`, `model_id`,
+  `dimensions`, `embed_documents`, `embed_query`), describe its settings in `EmbedderConfig`
+  (`shared/kb_config.py`, today shaped for Titan) and return it from `create_embedder`. Then run
+  `make ingest` and `make bench-retrieval` to choose a new `min_score`: every model has its own
+  similarity scale.
 
 ## Architecture diagram
 
@@ -99,6 +102,7 @@ flowchart LR
     subgraph aws["Amazon Bedrock"]
         CLAUDE["Claude<br/>Haiku · Sonnet"]
         TITAN["Titan Embeddings V2"]
+        MISTRAL["Mistral<br/>Pixtral Large · Large"]
     end
 
     subgraph files["Files"]
@@ -106,6 +110,7 @@ flowchart LR
         PRM["prompts/"]
         DATA["data/<br/>kb · status page"]
         SES[("var/sessions")]
+        TCK[("var/tickets")]
     end
 
     CLI --> RT
@@ -117,15 +122,20 @@ flowchart LR
     BLD --> TRI
     BLD --> SPC
     BLD -.reads.-> PRM
-    TRI -- "set_scope" --> ORC
-    SPC -- "request_rerouting" --> ORC
+    TRI -.set_scope.-> ORC
+    SPC -.request_rerouting.-> ORC
     TRI & SPC <--> SES
     TRI & SPC --> HK --> CLAUDE
     SPC --> RET --> IDX
     RET --> TITAN
+    SPC -.status page.-> DATA
+    SPC -- "open_ticket" --> TCK
     DATA --> ING --> IDX
     ING --> TITAN
+    BENCH -- "judge" --> MISTRAL
 ```
 
-Solid arrows are calls, dashed arrows are configuration reads. The two agents share the same
-session; the orchestrator decides by reading `ChatStore`.
+Solid arrows are calls; dashed arrows are reads, of files or of the agent state. `set_scope` and
+`request_rerouting` do not call the orchestrator: they leave a request in the agent state, which the
+orchestrator reads when the agent stops. The two agents share the same session, never talk to each
+other and never talk to the user; the orchestrator decides by reading `ChatStore`.
